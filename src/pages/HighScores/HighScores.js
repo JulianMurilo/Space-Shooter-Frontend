@@ -1,6 +1,8 @@
 import useAllHighScores from "../../hooks/useAllHighScores";
 import styled from "styled-components";
 import bgImg from "../../assets/background.png";
+import { useState } from "react";
+import ScoreCard from "../../components/ScoreCard/ScoreCard";
 
 const PageWrapper = styled.div`
   width: 100vw;
@@ -20,31 +22,6 @@ const PageWrapper = styled.div`
   align-items: center;
 `;
 
-const ScoreWrapper = styled.div`
-  background-color: #fff;
-  border-radius: 4px;
-  padding: 0.5rem 0.5rem;
-  text-align: center;
-  width: 275px;
-  height: 70px;
-  margin-bottom: 50px;
-  opacity: 0.75;
-  transition: all ease-in-out 300ms;
-
-  p {
-    margin: 0;
-  }
-
-  p:nth-child(1) {
-    margin-bottom: 15px;
-  }
-
-  &:hover {
-    cursor: pointer;
-    opacity: 1;
-  }
-`;
-
 const Header = styled.h1`
   color: #fff;
   font-size 24px;
@@ -53,39 +30,23 @@ const Header = styled.h1`
   margin-bottom: 25px;
 `;
 
-const DeleteButton = styled.button`
-  color: #fff;
-  background-color: red;
-  border-radius: 4px;
-  padding: 0.5rem 0.5rem;
-  outline: none;
-  border-color: red;
-  border-style: solid;
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
 export default function HighScores() {
   // object destructuring
-  const { allScores, deleteScore, isDeleting } = useAllHighScores();
+  const { allScores, deleteScore, isDeleting, updateScore } = useAllHighScores();
 
   return (
     <PageWrapper>
       <Header>Space Shooter Scores</Header>
       {allScores.map((score, i) => (
-        <ScoreWrapper key={i}>
-          <p>{score.userName || score.username}</p>
-          <p>{score.score}</p>
-          <DeleteButton
-            onClick={() => {
-              console.log("hit delete");
-              deleteScore(score._id);
-            }}
-          >
-            {isDeleting === true ? "Is Deleting" : "Delete"}
-          </DeleteButton>
-        </ScoreWrapper>
+        <ScoreCard
+          _id={score._id}
+          score={score.score}
+          name={score.name}
+          deleteScore={deleteScore}
+          isDeleting={isDeleting}
+          updateScore={updateScore}
+          key={i}
+        />
       ))}
     </PageWrapper>
   );
